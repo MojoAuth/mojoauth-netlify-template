@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://developers.netlify.com/sdk/config-schema.json
+config:
+  slug: mojoauth
+  name: MojoAuth OIDC Authentication
+  description: Integrate MojoAuth hosted login page with your Netlify site using the standard OIDC flow
+  author: 
+    name: MojoAuth
+    url: https://mojoauth.com
+  logo: 
+    light: /assets/mojoauth-logo-light.png
+    dark: /assets/mojoauth-logo-dark.png
+  display:
+    theme:
+      colorScheme: light
+      primaryColor: "#6366F1"
+      accentColor: "#4F46E5"
+  scopes:
+    site: ["read", "write"]
+    user: ["read"]
+    env: ["read", "write", "delete"]
+    buildHooks: ["read", "write"]
+    functions: ["read", "write"]
+
+  categories:
+    - authentication
+    - security
+    - identity
+
+  # set this to true to add a global require shim to esbuild. Workaround for https://github.com/evanw/esbuild/issues/1921
+  use_cjs_shims: false

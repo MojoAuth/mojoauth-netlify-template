@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MojoAuth Demo - Profile</title>
+    <link rel="stylesheet" href="/src/components/profile.css">
+
+
+</head>
+<body>
+    <nav class="navbar">
+        <img src="https://content.mojoauth.com/images/mojoauth-logo.png" alt="MojoAuth" class="navbar-logo">
+        <div class="navbar-links">
+            <a href="/" class="navbar-link">Home</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="header">
+            <img src="https://content.mojoauth.com/images/mojoauth-logo.png" alt="MojoAuth Logo" class="logo">
+            <h1>User <span class="highlight">Profile</span></h1>
+        </div>
+        
+        <div class="card" id="profile-card">
+            <div id="loading" class="loading">
+                <div class="loading-spinner"></div>
+                <div>Loading your profile information...</div>
+            </div>
+            <div id="error" class="error-message" style="display: none;"></div>
+            
+            <div id="profile-content" style="display: none;">
+                <div class="profile-header">
+                    <div class="profile-picture-container">
+                        <img src="" alt="Profile Picture" class="profile-picture" id="profile-picture">
+                    </div>
+                    <div class="profile-details">
+                        <h2 class="profile-name" id="profile-name"></h2>
+                        <p class="profile-email" id="profile-email"></p>
+                    </div>
+                </div>
+                
+                                <div class="details-grid">
+                                    <div class="info-card">
+                                        <h3 class="section-title">Account Overview</h3>
+                                        <div class="profile-info" id="profile-info"><!-- Filled by JS --></div>
+                                    </div>
+                                    <div class="info-card">
+                                        <h3 class="section-title">Session Details</h3>
+                                        <div class="token-section">
+                                            <h3 class="token-heading">Access Token</h3>
+                                            <div class="token-display" id="token-display"></div>
+                                            <div class="copy-row"><button id="copy-token" class="copy-btn">Copy Token</button></div>
+                                        </div>
+                                    </div>
+                                </div>
+                
+                <pre id="json-data" style="display: none;"></pre>
+                
+                <div class="button-container">
+                    <button id="toggle-json" class="button ghost">Show Raw JSON</button>
+                    <button id="logout" class="button logout">Logout</button>
+                </div>
+            </div>
+            
+            <div id="login-prompt" class="login-card" style="display: none;">
+                <p class="login-message">You need to authenticate to view your profile</p>
+                <a href="/.netlify/functions/auth" class="button">Sign In with MojoAuth</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tokenFromUrl = urlParams.get('token');
+            
+            // Check for token in cookies
+            function getCookie(name) {
+                const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+                return match ? match[2] : null;
+            }
+            
+            const token = tokenFromUrl || getCookie('mojoauth_token');
+            
+            // If we have a token in the URL, clean it up
+            if (tokenFromUrl) {
+                // Remove token from URL to prevent sharing
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+            
+            // Show login prompt if no token found
+            if (!token) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('login-prompt').style.display = 'block';
+                return;
+            }
+            
+            try {
+                // Call the user info endpoint to get the user's profile
+                const response = await fetch('/.netlify/functions/auth-user', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Authentication failed. Please log in again.');
+                }
+                
+                const userData = await response.json();
+                
+                // Update UI with user data
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('profile-content').style.display = 'block';
+                
+                // Set profile picture
+                const profilePic = document.getElementById('profile-picture');
+                profilePic.src = userData.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name || userData.sub)}&background=16B1FF&color=fff&size=200`;
+                
+                // Set name and email
+                document.getElementById('profile-name').textContent = userData.name || userData.sub;
+                document.getElementById('profile-email').textContent = userData.email || '';
+                
+                // Display token
+                document.getElementById('token-display').textContent = token;
+                
+                // Add profile info rows
+                const profileInfo = document.getElementById('profile-info');
+                profileInfo.innerHTML = ''; // Clear any existing content
+                
+                // Add user data to profile info
+                const displayableFields = {
+                    'User ID': 'sub',
+                    'Email': 'email',
+                    'Email Verified': 'email_verified',
+                    'Issued At': 'iat',
+                };
+                
+                Object.entries(displayableFields).forEach(([label, key]) => {
+                    if (userData[key] !== undefined) {
+                        let value = userData[key];
+                        
+                        // Format date fields
+                        if (key === 'iat' || key === 'exp' || key === 'auth_time') {
+                            const date = new Date(value * 1000);
+                            value = date.toLocaleString();
+                        }
+                        
+                        // Format boolean fields
+                        if (typeof value === 'boolean') {
+                            value = value ? 'Yes' : 'No';
+                        }
+                        
+                        const row = document.createElement('div');
+                        row.className = 'info-row';
+                        row.innerHTML = `
+                            <div class="info-label">${label}</div>
+                            <div class="info-value">${value}</div>
+                        `;
+                        profileInfo.appendChild(row);
+                    }
+                });
+                
+                // Set up raw JSON toggle
+                const jsonData = document.getElementById('json-data');
+                jsonData.textContent = JSON.stringify(userData, null, 2);
+                
+                document.getElementById('toggle-json').addEventListener('click', () => {
+                    if (jsonData.style.display === 'none') {
+                        jsonData.style.display = 'block';
+                        document.getElementById('toggle-json').textContent = 'Hide Raw JSON';
+                    } else {
+                        jsonData.style.display = 'none';
+                        document.getElementById('toggle-json').textContent = 'Show Raw JSON';
+                    }
+                });
+                
+                // Set up logout button
+                document.getElementById('logout').addEventListener('click', () => {
+                    // Clear the token cookie
+                    document.cookie = 'mojoauth_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                    // Redirect to home
+                    window.location.href = '/';
+                });
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                const errorElement = document.getElementById('error');
+                errorElement.style.display = 'block';
+                errorElement.textContent = `Error: ${error.message}`;
+                
+                // Show login prompt after a short delay
+                setTimeout(() => {
+                    document.getElementById('login-prompt').style.display = 'block';
+                }, 3000);
+            }
+        });
+        
+        // Lightweight copy-to-clipboard
+        (function(){
+          document.addEventListener('click', function(e){
+            if(e.target && e.target.id === 'copy-token'){
+              const el = document.getElementById('token-display');
+              const text = el ? el.textContent : '';
+              if(!text) return;
+              navigator.clipboard.writeText(text).then(()=>{
+                const btn = e.target; const old = btn.textContent; btn.textContent = 'Copied!';
+                setTimeout(()=>{ btn.textContent = old; }, 1400);
+              });
+            }
+          });
+        })();
+    </script>
+    
+    <footer style="text-align: center; padding: 2rem; margin-top: auto; background-color: var(--color-dark-bg); color: #FFFFFF; font-size: 0.95rem;">
+        <p>Powered by <a href="https://mojoauth.com" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); text-decoration: none;">MojoAuth</a> and <a href="https://netlify.com" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); text-decoration: none;">Netlify</a></p>
+    </footer>
+</body>
+</html>

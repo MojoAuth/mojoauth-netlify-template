@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MojoAuth OIDC Demo</title>
+    <link rel="stylesheet" href="/src/components/home.css">
+
+
+</head>
+<body>
+    <nav class="navbar">
+        <img src="https://content.mojoauth.com/images/mojoauth-logo.png" alt="MojoAuth" class="navbar-logo">
+        <div class="navbar-links">
+            <a href="https://docs.mojoauth.com" class="navbar-link" target="_blank" rel="noopener noreferrer">Docs</a>
+            <a href="https://github.com/MojoAuth" class="navbar-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+    </nav>
+    
+    <div class="hero">
+      <div class="hero-card container">
+        <div class="badge">Demo • MojoAuth + Netlify • OIDC</div>
+        <img src="https://content.mojoauth.com/images/mojoauth-logo.png" alt="MojoAuth Logo" class="logo">
+        <h1>Authenticate with <span class="highlight">MojoAuth</span></h1>
+        <p>Secure passwordless login using standard OIDC flow with a minimal setup.</p>
+        <div class="buttons">
+          <a href="/.netlify/functions/auth" class="button">
+            <span>Sign In</span>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 12H4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="https://github.com/MojoAuth/mojoauth-netlify-extension" class="button secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Features below hero -->
+    <section class="features">
+      <div class="features-grid">
+        <div class="feature-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l7.5 4.5v9L12 21 4.5 16.5v-9L12 3z" stroke="currentColor" stroke-width="2"/></svg>
+          <h3 class="feature-title">Passwordless by Design</h3>
+          <p class="feature-desc">Delightful sign-in with OTP, magic links, and passkeys via MojoAuth.</p>
+        </div>
+        <div class="feature-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7h16M4 12h10M4 17h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <h3 class="feature-title">Standards-first OIDC</h3>
+          <p class="feature-desc">Use a clean, secure OIDC flow that works across providers and frameworks.</p>
+        </div>
+        <div class="feature-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 8v8m-4-4h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+          <h3 class="feature-title">5‑minute Setup</h3>
+          <p class="feature-desc">Deploy to Netlify and start authenticating users with minimal config.</p>
+        </div>
+      </div>
+    </section>
+    
+    <footer>
+        <p>Powered by <a href="https://mojoauth.com" target="_blank" rel="noopener noreferrer">MojoAuth</a> and <a href="https://netlify.com" target="_blank" rel="noopener noreferrer">Netlify</a></p>
+    </footer>
+</body>
+</html>

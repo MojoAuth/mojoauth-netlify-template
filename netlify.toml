@@ -1,0 +1,19 @@
+[build]
+command = "netlify-extension build"
+publish = "public"
+
+[dev]
+command = "netlify-extension dev"
+
+[functions]
+directory = "netlify/functions"
+node_bundler = "esbuild"
+
+[[plugins]]
+package = "@netlify/netlify-plugin-netlify-extension"
+
+# Redirects for SPA
+[[redirects]]
+from = "/*"
+to = "/profile.html"
+status = 200
