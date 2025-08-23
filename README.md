@@ -72,9 +72,9 @@ The extension requires the following environment variables:
 
 This extension creates three serverless functions in your Netlify site:
 
-1. **auth.js**: Initiates the authentication flow and redirects to MojoAuth's hosted login page
-2. **auth-callback.js**: Handles the callback from MojoAuth after successful authentication
-3. **auth-user.js**: Provides user profile information based on the access token
+1. **auth.ts**: Initiates the authentication flow and redirects to MojoAuth's hosted login page
+2. **auth-callback.ts**: Handles the callback from MojoAuth after successful authentication
+3. **auth-user.ts**: Provides user profile information based on the access token
 
 ### Authentication Flow
 
@@ -82,6 +82,14 @@ This extension creates three serverless functions in your Netlify site:
 2. After successful authentication, MojoAuth redirects back to your site
 3. The access token is securely stored and used to fetch user information
 4. User is redirected to your application with authentication complete
+
+### Error Handling
+
+The application includes built-in error handling for common issues:
+
+1. **Configuration Errors**: If environment variables are missing, users will see a user-friendly error page explaining which variables need to be set up and how to fix the issue.
+2. **Authentication Errors**: If authentication fails, users are redirected to an error page with details.
+3. **Token Errors**: If the access token is invalid or expired, users are prompted to log in again.
 
 ## Resources
 

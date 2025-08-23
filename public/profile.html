@@ -103,6 +103,14 @@
                 });
                 
                 if (!response.ok) {
+                    const errorData = await response.json();
+                    
+                    // Check if this is a configuration error
+                    if (errorData.error === 'Configuration error' && errorData.redirect) {
+                        window.location.href = errorData.redirect;
+                        return;
+                    }
+                    
                     throw new Error('Authentication failed. Please log in again.');
                 }
                 

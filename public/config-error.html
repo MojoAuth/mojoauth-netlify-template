@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MojoAuth - Configuration Error</title>
+    <link rel="stylesheet" href="/css/error.css">
+    <style>
+        :root {
+            --color-warning: #FFA500;
+        }
+        
+        .config-error {
+            background-color: rgba(255, 76, 81, 0.05);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            max-width: 720px;
+            text-align: left;
+            border-left: 4px solid var(--color-error);
+        }
+        
+        .config-list {
+            background-color: rgba(17, 25, 39, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: monospace;
+            line-height: 1.8;
+        }
+        
+        .missing {
+            color: var(--color-error);
+            font-weight: bold;
+        }
+        
+        .config-ok {
+            color: #10B981;
+        }
+        
+        .warning {
+            background-color: rgba(255, 165, 0, 0.1);
+            border-left: 4px solid var(--color-warning);
+            color: #805400;
+        }
+        
+        .tutorial-steps {
+            text-align: left;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+        
+        .tutorial-steps ol {
+            padding-left: 1.5rem;
+        }
+        
+        .tutorial-steps li {
+            margin-bottom: 1rem;
+        }
+        
+        .tutorial-steps img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid #eaeaea;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .tutorial-steps code {
+            background-color: rgba(22, 177, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <img src="https://content.mojoauth.com/images/mojoauth-logo.png" alt="MojoAuth" class="navbar-logo">
+        <div class="navbar-links">
+            <a href="/" class="navbar-link">Home</a>
+            <a href="https://docs.mojoauth.com" class="navbar-link" target="_blank" rel="noopener noreferrer">Docs</a>
+        </div>
+    </nav>
+    
+    <div class="error-container">
+        <div class="error-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z"/>
+            </svg>
+        </div>
+        
+        <h1>Configuration Error</h1>
+        <p class="error-message">Missing required environment variables for MojoAuth authentication.</p>
+        
+        <div class="config-error">
+            <h2>Environment Variable Status:</h2>
+            <div class="config-list">
+                <div id="client-id-status">MOJOAUTH_CLIENT_ID: <span class="missing">Missing</span></div>
+                <div id="client-secret-status">MOJOAUTH_CLIENT_SECRET: <span class="missing">Missing</span></div>
+                <div id="redirect-uri-status">MOJOAUTH_REDIRECT_URI: <span class="missing">Missing</span></div>
+                <div id="issuer-status">MOJOAUTH_ISSUER: <span class="config-ok">Using default (https://api.mojoauth.com)</span></div>
+            </div>
+        </div>
+        
+        <div class="tutorial-steps">
+            <h2>How to Fix This:</h2>
+            <ol>
+                <li>Create a MojoAuth account at <a href="https://mojoauth.com" target="_blank" rel="noopener noreferrer">mojoauth.com</a> if you haven't already.</li>
+                <li>Create an application in the MojoAuth dashboard and enable OIDC.</li>
+                <li>In your Netlify dashboard, go to Site settings > Environment variables.</li>
+                <li>Add the following environment variables with values from your MojoAuth application:
+                    <ul>
+                        <li><code>MOJOAUTH_CLIENT_ID</code></li>
+                        <li><code>MOJOAUTH_CLIENT_SECRET</code></li>
+                        <li><code>MOJOAUTH_REDIRECT_URI</code> (typically <code>https://your-site.netlify.app/.netlify/functions/auth-callback</code>)</li>
+                    </ul>
+                </li>
+                <li>Redeploy your site or restart your Netlify dev server.</li>
+            </ol>
+        </div>
+        
+        <a href="/" class="button">Return to Home</a>
+    </div>
+    
+    <footer>
+        <p>Powered by <a href="https://mojoauth.com" target="_blank" rel="noopener noreferrer">MojoAuth</a> and <a href="https://netlify.com" target="_blank" rel="noopener noreferrer">Netlify</a></p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get configuration status from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const missingVars = urlParams.get('missing')?.split(',') || [];
+            
+            // Update the status for each environment variable
+            if (missingVars.includes('client_id')) {
+                document.getElementById('client-id-status').innerHTML = 'MOJOAUTH_CLIENT_ID: <span class="missing">Missing</span>';
+            } else {
+                document.getElementById('client-id-status').innerHTML = 'MOJOAUTH_CLIENT_ID: <span class="config-ok">✓ Configured</span>';
+            }
+            
+            if (missingVars.includes('client_secret')) {
+                document.getElementById('client-secret-status').innerHTML = 'MOJOAUTH_CLIENT_SECRET: <span class="missing">Missing</span>';
+            } else {
+                document.getElementById('client-secret-status').innerHTML = 'MOJOAUTH_CLIENT_SECRET: <span class="config-ok">✓ Configured</span>';
+            }
+            
+            if (missingVars.includes('redirect_uri')) {
+                document.getElementById('redirect-uri-status').innerHTML = 'MOJOAUTH_REDIRECT_URI: <span class="missing">Missing</span>';
+            } else {
+                document.getElementById('redirect-uri-status').innerHTML = 'MOJOAUTH_REDIRECT_URI: <span class="config-ok">✓ Configured</span>';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,7 +1,43 @@
 import { Issuer } from 'openid-client';
 import type { Handler } from '@netlify/functions';
 
+// Helper function to validate required environment variables
+function validateEnvVars(): { valid: boolean; missing: string[] } {
+  const requiredVars = [
+    { key: 'MOJOAUTH_CLIENT_ID', value: process.env.MOJOAUTH_CLIENT_ID },
+    { key: 'MOJOAUTH_CLIENT_SECRET', value: process.env.MOJOAUTH_CLIENT_SECRET },
+    { key: 'MOJOAUTH_REDIRECT_URI', value: process.env.MOJOAUTH_REDIRECT_URI }
+  ];
+  
+  const missingVars = requiredVars
+    .filter(v => !v.value)
+    .map(v => v.key.toLowerCase().replace('mojoauth_', ''));
+  
+  return {
+    valid: missingVars.length === 0,
+    missing: missingVars
+  };
+}
+
 export const handler: Handler = async (event, context) => {
+  // Validate environment variables
+  const envCheck = validateEnvVars();
+  if (!envCheck.valid) {
+    console.error('Missing required environment variables:', envCheck.missing);
+    return {
+      statusCode: 400,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        error: 'Configuration error', 
+        message: 'Missing required environment variables', 
+        missing: envCheck.missing,
+        redirect: `/config-error.html?missing=${envCheck.missing.join(',')}` 
+      })
+    };
+  }
+
   try {
     // Try to get token from various sources
     let token: string | null = null;
