@@ -30,6 +30,10 @@ git clone https://github.com/MojoAuth/mojoauth-netlify-template
 cd mojoauth-netlify-template
 ```
 
+### TypeScript Support
+
+This template now includes TypeScript support for the Netlify functions. See [TYPESCRIPT.md](TYPESCRIPT.md) for details on the TypeScript implementation.
+
 ### Installation
 
 ```bash

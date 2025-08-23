@@ -1,13 +1,14 @@
 [build]
-command = "netlify-extension build"
+command = "netlify-extension build && ./scripts/build-functions.sh"
 publish = "public"
 
 [dev]
 command = "netlify-extension dev"
 
 [functions]
-directory = "netlify/functions"
+directory = "dist/netlify/functions"
 node_bundler = "esbuild"
+external_node_modules = ["openid-client"]
 
 [[plugins]]
 package = "@netlify/netlify-plugin-netlify-extension"
