@@ -7,8 +7,8 @@ config:
     name: MojoAuth
     url: https://mojoauth.com
   logo: 
-    light: /assets/mojoauth-logo-light.png
-    dark: /assets/mojoauth-logo-dark.png
+    light: /assets/mojoauth-logo.png
+    dark: /assets/mojoauth-logo.png
   display:
     theme:
       colorScheme: light
