@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MojoAuth Demo - Profile</title>
-    <link rel="stylesheet" href="/src/components/profile.css">
-
-
+    <link rel="stylesheet" href="/css/profile.css">
 </head>
 <body>
     <nav class="navbar">
@@ -105,6 +103,14 @@
                 });
                 
                 if (!response.ok) {
+                    const errorData = await response.json();
+                    
+                    // Check if this is a configuration error
+                    if (errorData.error === 'Configuration error' && errorData.redirect) {
+                        window.location.href = errorData.redirect;
+                        return;
+                    }
+                    
                     throw new Error('Authentication failed. Please log in again.');
                 }
                 

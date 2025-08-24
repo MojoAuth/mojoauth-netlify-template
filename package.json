@@ -7,7 +7,12 @@
   "scripts": {
     "build": "netlify-extension build",
     "dev": "netlify-extension dev",
-    "dev:open": "netlify-extension dev --open"
+    "dev:open": "netlify-extension dev --open",
+    "dev:functions": "concurrently \"npm run watch:functions\" \"netlify dev\"",
+    "build:functions": "tsc -p tsconfig.functions.json",
+    "watch:functions": "tsc -p tsconfig.functions.json --watch",
+    "clean": "rimraf dist",
+    "build:all": "npm run clean && npm run build:functions && npm run build"
   },
   "dependencies": {
     "@netlify/sdk": "^4.0.0",
@@ -16,9 +21,14 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@netlify/functions": "^4.2.2",
     "@netlify/netlify-plugin-netlify-extension": "1.2.2",
+    "@types/node": "^24.3.0",
+    "@types/openid-client": "^3.1.6",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
-    "typescript": "5.9.2"
+    "concurrently": "^9.2.0",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.9.2"
   }
 }
