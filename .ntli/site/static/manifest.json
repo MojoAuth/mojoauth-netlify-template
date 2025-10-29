@@ -1,0 +1,8 @@
+{
+  "sdkVersion": "4.0.0",
+  "hasDataIntegration": false,
+  "hasBuildEventHandler": false,
+  "hasIntegrationUI": false,
+  "hasMCPContext": false,
+  "uiSurfaces": []
+}

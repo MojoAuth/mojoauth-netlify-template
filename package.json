@@ -15,14 +15,14 @@
     "build:all": "npm run clean && npm run build:functions && npm run build"
   },
   "dependencies": {
-    "@netlify/sdk": "^4.0.0",
+    "@netlify/sdk": "latest",
     "openid-client": "^5.6.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@netlify/functions": "^4.2.2",
-    "@netlify/netlify-plugin-netlify-extension": "1.2.2",
+    "@netlify/netlify-plugin-netlify-extension": "latest",
     "@types/node": "^24.3.0",
     "@types/openid-client": "^3.1.6",
     "@types/react": "^18.2.21",

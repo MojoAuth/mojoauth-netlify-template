@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/index.ts"],
+  "sourcesContent": ["// Documentation: https://sdk.netlify.com/docs\nimport { NetlifyExtension } from \"@netlify/sdk\";\n\n/**\n * MojoAuth OIDC Authentication Extension\n * \n * This extension integrates MojoAuth's hosted login page \n * with your Netlify site using the standard OIDC flow.\n * \n * Features:\n * - Easy integration with MojoAuth's hosted login page\n * - Standard OIDC flow support\n * - Automatic function generation for authentication endpoints\n * - Developer-friendly UI/UX\n */\nconst mojoAuthExtension = new NetlifyExtension();\n\n// In a full implementation, we would:\n// 1. Register React components for the UI\n// 2. Add navigation and pages\n// 3. Set up hooks for environment variables and function creation\n// 4. Provide UI for configuration and management\n\n// Export the extension for the Netlify SDK to use\nexport { mojoAuthExtension as extension };\n"],
+  "mappings": ";AACA,SAAS,wBAAwB;AAcjC,IAAM,oBAAoB,IAAI,iBAAiB;",
+  "names": []
+}
