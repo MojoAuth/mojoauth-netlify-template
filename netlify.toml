@@ -1,13 +1,12 @@
 [build]
 command = "netlify-extension build"
-publish = "public"
+publish = ".ntli/site/static"
+
+[functions]
+directory = "src/endpoints"
 
 [dev]
 command = "netlify-extension dev"
-
-[functions]
-directory = "netlify/functions"
-node_bundler = "esbuild"
 
 [[plugins]]
 package = "@netlify/netlify-plugin-netlify-extension"
